@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\SchoolController;
+use App\Http\Controllers\Api\BranchController;
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "api" middleware group. Make something great!
+|
+*/
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+// Schools API Routes
+Route::apiResource('schools', SchoolController::class);
+
+// Branches API Routes
+Route::apiResource('branches', BranchController::class);
+
+// School-specific branch routes
+Route::get('schools/{school}/branches', [BranchController::class, 'index'])->name('schools.branches.index');
+Route::post('schools/{school}/branches', [BranchController::class, 'store'])->name('schools.branches.store');
