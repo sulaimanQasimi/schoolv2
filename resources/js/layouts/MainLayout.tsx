@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import { useNotifications } from '../hooks/useNotifications';
+import { LanguageSwitcher } from '../components/language-switcher';
 import { 
   LayoutDashboard, 
   School, 
@@ -116,6 +117,11 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 {item.name}
               </Link>
             ))}
+            
+            {/* Language Switcher in mobile sidebar */}
+            <div className="mt-4 pt-4 border-t border-sidebar-border">
+              <LanguageSwitcher variant="sidebar" />
+            </div>
           </nav>
         </div>
       </div>
@@ -147,6 +153,11 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 </li>
               ))}
             </ul>
+            
+            {/* Language Switcher in desktop sidebar */}
+            <div className="mt-4 pt-4 border-t border-sidebar-border">
+              <LanguageSwitcher variant="sidebar" />
+            </div>
           </nav>
         </div>
       </div>
@@ -174,6 +185,9 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               >
                 {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               </button>
+
+              {/* Language Switcher */}
+              <LanguageSwitcher variant="minimal" />
 
               {/* Notifications */}
               <div className="relative">
