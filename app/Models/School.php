@@ -41,4 +41,12 @@ class School extends Model
     {
         return $this->hasMany(Branch::class);
     }
+
+    /**
+     * Get the departments for the school through branches.
+     */
+    public function departments()
+    {
+        return $this->hasManyThrough(Department::class, Branch::class);
+    }
 }

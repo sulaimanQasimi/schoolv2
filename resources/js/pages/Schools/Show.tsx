@@ -1,9 +1,11 @@
 import React from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import MainLayout from '../../layouts/MainLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/Card';
-import { Button } from '../../components/ui/Button';
-import { ArrowLeft, School, Building2, Mail, Phone, MapPin, Edit, Trash2, Plus } from 'lucide-react';
+import { DetailCard, DetailItem } from '../../components/ui/DetailCard';
+import ActionCard from '../../components/ui/ActionCard';
+import StatsCard from '../../components/ui/StatsCard';
+import PageHeader from '../../components/ui/PageHeader';
+import { School, Building2, Mail, Phone, MapPin, Edit, Trash2, Plus, Users, Calendar, Hash } from 'lucide-react';
 
 interface Branch {
   id: number;
@@ -30,130 +32,131 @@ interface ShowSchoolProps {
 }
 
 const ShowSchool: React.FC<ShowSchoolProps> = ({ school }) => {
+  const handleDelete = () => {
+    if (confirm(`Are you sure you want to delete "${school.name}"? This action cannot be undone.`)) {
+      router.delete(`/schools/${school.id}`, {
+        onSuccess: () => {
+          // Optionally show success message
+        },
+        onError: (errors) => {
+          console.error('Delete failed:', errors);
+          alert('Failed to delete school. Please try again.');
+        }
+      });
+    }
+  };
+
   return (
     <MainLayout>
       <Head title={school.name} />
       
-      <div className="space-y-6">
+      <div className="space-y-8">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Link href="/schools">
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Schools
-              </Button>
-            </Link>
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">{school.name}</h1>
-              <p className="text-muted-foreground">School Details</p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Link href={`/schools/${school.id}/edit`}>
-              <Button variant="outline">
-                <Edit className="mr-2 h-4 w-4" />
-                Edit
-              </Button>
-            </Link>
-            <Button variant="destructive">
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete
-            </Button>
-          </div>
-        </div>
+        <PageHeader
+          title={school.name}
+          description="School Details"
+          backHref="/schools"
+          backLabel="Back to Schools"
+          primaryAction={{
+            label: 'Edit School',
+            href: `/schools/${school.id}/edit`,
+            icon: Edit,
+          }}
+          secondaryActions={[
+            {
+              label: 'Delete',
+              href: '#',
+              icon: Trash2,
+              variant: 'destructive',
+              onClick: handleDelete,
+            },
+          ]}
+        />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* School Information */}
           <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <School className="h-5 w-5" />
-                  <span>School Information</span>
-                </CardTitle>
-                <CardDescription>
-                  Basic details about {school.name}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-muted-foreground">School Name</label>
-                    <p className="text-foreground font-medium">{school.name}</p>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-muted-foreground">School Code</label>
-                    <p className="text-foreground font-medium">{school.code}</p>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-muted-foreground">Email</label>
-                    <div className="flex items-center space-x-2">
-                      <Mail className="h-4 w-4 text-muted-foreground" />
-                      <p className="text-foreground">{school.email}</p>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-muted-foreground">Phone</label>
-                    <div className="flex items-center space-x-2">
-                      <Phone className="h-4 w-4 text-muted-foreground" />
-                      <p className="text-foreground">{school.phone_number}</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-muted-foreground">Address</label>
-                  <div className="flex items-start space-x-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground mt-1" />
-                    <p className="text-foreground">{school.address}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <DetailCard
+              title="School Information"
+              description={`Basic details about ${school.name}`}
+              icon={School}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <DetailItem
+                  label="School Name"
+                  value={school.name}
+                  icon={Building2}
+                />
+                <DetailItem
+                  label="School Code"
+                  value={school.code}
+                  icon={Hash}
+                />
+                <DetailItem
+                  label="Email Address"
+                  value={school.email}
+                  icon={Mail}
+                />
+                <DetailItem
+                  label="Phone Number"
+                  value={school.phone_number}
+                  icon={Phone}
+                />
+              </div>
+              
+              <DetailItem
+                label="Address"
+                value={school.address}
+                icon={MapPin}
+              />
+            </DetailCard>
           </div>
 
           {/* Stats and Actions */}
           <div className="space-y-6">
-            {/* Stats Card */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Statistics</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Total Branches</span>
-                  <span className="text-2xl font-bold text-foreground">{school.branches.length}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Created</span>
-                  <span className="text-sm text-foreground">
-                    {new Date(school.created_at).toLocaleDateString()}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
+            <StatsCard
+              title="Statistics"
+              icon={Users}
+              stats={[
+                {
+                  label: 'Total Branches',
+                  value: school.branches.length,
+                  icon: Building2,
+                  description: 'Active branches',
+                },
+                {
+                  label: 'Created',
+                  value: new Date(school.created_at).toLocaleDateString(),
+                  icon: Calendar,
+                  description: 'Date added',
+                },
+              ]}
+            />
 
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <Link href={`/branches/create?school_id=${school.id}`} className="w-full">
-                  <Button className="w-full justify-start">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add Branch
-                  </Button>
-                </Link>
-                <Link href={`/schools/${school.id}/edit`} className="w-full">
-                  <Button variant="outline" className="w-full justify-start">
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit School
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+            <ActionCard
+              title="Quick Actions"
+              description="Common tasks for this school"
+              icon={Users}
+              actions={[
+                {
+                  label: 'Add Branch',
+                  href: `/branches/create?school_id=${school.id}`,
+                  icon: Plus,
+                },
+                {
+                  label: 'Edit School',
+                  href: `/schools/${school.id}/edit`,
+                  icon: Edit,
+                  variant: 'outline',
+                },
+                {
+                  label: 'Delete School',
+                  onClick: handleDelete,
+                  icon: Trash2,
+                  variant: 'destructive',
+                },
+              ]}
+            />
           </div>
         </div>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\School;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class SchoolController extends Controller
@@ -13,6 +14,8 @@ class SchoolController extends Controller
      */
     public function index(Request $request)
     {
+        Gate::authorize('viewAny', School::class);
+        
         $query = School::withCount('branches');
 
         // Search functionality
@@ -59,6 +62,8 @@ class SchoolController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', School::class);
+        
         return Inertia::render('Schools/Create');
     }
 
@@ -67,6 +72,8 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create', School::class);
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:50|unique:schools,code',
@@ -86,6 +93,8 @@ class SchoolController extends Controller
      */
     public function show(School $school)
     {
+        Gate::authorize('view', $school);
+        
         $school->load(['branches' => function ($query) {
             $query->orderBy('name');
         }]);
@@ -100,6 +109,8 @@ class SchoolController extends Controller
      */
     public function edit(School $school)
     {
+        Gate::authorize('update', $school);
+        
         return Inertia::render('Schools/Edit', [
             'school' => $school
         ]);
@@ -110,6 +121,8 @@ class SchoolController extends Controller
      */
     public function update(Request $request, School $school)
     {
+        Gate::authorize('update', $school);
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:50|unique:schools,code,' . $school->id,
@@ -129,6 +142,8 @@ class SchoolController extends Controller
      */
     public function destroy(School $school)
     {
+        Gate::authorize('delete', $school);
+        
         $school->delete();
 
         return redirect()->route('schools.index')

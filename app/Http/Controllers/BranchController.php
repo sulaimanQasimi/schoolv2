@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use App\Models\School;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class BranchController extends Controller
@@ -14,6 +15,8 @@ class BranchController extends Controller
      */
     public function index(Request $request)
     {
+        Gate::authorize('viewAny', Branch::class);
+        
         $query = Branch::with('school');
 
         // Search functionality
@@ -76,6 +79,8 @@ class BranchController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Branch::class);
+        
         $schools = School::select('id', 'name')->get();
 
         return Inertia::render('Branches/Create', [
@@ -88,6 +93,8 @@ class BranchController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create', Branch::class);
+        
         $request->validate([
             'school_id' => 'required|exists:schools,id',
             'name' => 'required|string|max:255',
@@ -107,6 +114,8 @@ class BranchController extends Controller
      */
     public function show(Branch $branch)
     {
+        Gate::authorize('view', $branch);
+        
         $branch->load('school');
 
         return Inertia::render('Branches/Show', [
@@ -119,6 +128,8 @@ class BranchController extends Controller
      */
     public function edit(Branch $branch)
     {
+        Gate::authorize('update', $branch);
+        
         $schools = School::select('id', 'name')->get();
 
         return Inertia::render('Branches/Edit', [
@@ -132,6 +143,8 @@ class BranchController extends Controller
      */
     public function update(Request $request, Branch $branch)
     {
+        Gate::authorize('update', $branch);
+        
         $request->validate([
             'school_id' => 'required|exists:schools,id',
             'name' => 'required|string|max:255',
@@ -151,6 +164,8 @@ class BranchController extends Controller
      */
     public function destroy(Branch $branch)
     {
+        Gate::authorize('delete', $branch);
+        
         $branch->delete();
 
         return redirect()->route('branches.index')

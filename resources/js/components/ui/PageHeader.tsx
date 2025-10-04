@@ -15,7 +15,8 @@ interface PageHeaderProps {
   };
   secondaryActions?: Array<{
     label: string;
-    href: string;
+    href?: string;
+    onClick?: () => void;
     icon?: React.ComponentType<any>;
     variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
   }>;
@@ -54,13 +55,21 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         <div className="flex items-center space-x-2">
           {secondaryActions.map((action, index) => {
             const ActionIcon = action.icon;
-            return (
+            const buttonContent = (
+              <Button variant={action.variant || 'outline'} size="sm">
+                {ActionIcon && <ActionIcon className="mr-2 h-4 w-4" />}
+                {action.label}
+              </Button>
+            );
+
+            return action.href ? (
               <Link key={index} href={action.href}>
-                <Button variant={action.variant || 'outline'} size="sm">
-                  {ActionIcon && <ActionIcon className="mr-2 h-4 w-4" />}
-                  {action.label}
-                </Button>
+                {buttonContent}
               </Link>
+            ) : (
+              <div key={index} onClick={action.onClick}>
+                {buttonContent}
+              </div>
             );
           })}
           

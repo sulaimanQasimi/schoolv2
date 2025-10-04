@@ -1,9 +1,11 @@
 import React from 'react';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import MainLayout from '../../layouts/MainLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/Card';
-import { Button } from '../../components/ui/Button';
-import { ArrowLeft, School, Save, AlertCircle } from 'lucide-react';
+import FormSection from '../../components/ui/FormSection';
+import FormField from '../../components/ui/FormField';
+import FormActions from '../../components/ui/FormActions';
+import PageHeader from '../../components/ui/PageHeader';
+import { School, Building2, Mail, Phone, MapPin, Hash, Users, CheckCircle } from 'lucide-react';
 
 interface School {
   id: number;
@@ -36,162 +38,154 @@ const EditSchool: React.FC<EditSchoolProps> = ({ school }) => {
     <MainLayout>
       <Head title={`Edit ${school.name}`} />
       
-      <div className="space-y-6">
+      <div className="space-y-8">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Link href="/schools">
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Schools
-              </Button>
-            </Link>
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">Edit School</h1>
-              <p className="text-muted-foreground">Update school information</p>
-            </div>
-          </div>
-        </div>
+        <PageHeader
+          title={`Edit ${school.name}`}
+          description="Update school information"
+          backHref="/schools"
+          backLabel="Back to Schools"
+          primaryAction={{
+            label: 'View School',
+            href: `/schools/${school.id}`,
+            icon: School,
+          }}
+        />
 
         {/* Form */}
-        <div className="max-w-2xl">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <School className="h-5 w-5" />
-                <span>School Information</span>
-              </CardTitle>
-              <CardDescription>
-                Update the details for {school.name}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={submit} className="space-y-6">
-                {/* School Name */}
-                <div className="space-y-2">
-                  <label htmlFor="name" className="text-sm font-medium text-foreground">
-                    School Name *
-                  </label>
-                  <input
-                    id="name"
-                    type="text"
-                    value={data.name}
-                    onChange={(e) => setData('name', e.target.value)}
-                    className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
-                    placeholder="Enter school name"
-                    required
-                  />
-                  {errors.name && (
-                    <div className="flex items-center space-x-2 text-sm text-destructive">
-                      <AlertCircle className="h-4 w-4" />
-                      <span>{errors.name}</span>
-                    </div>
-                  )}
-                </div>
+        <div className="max-w-4xl">
+          <form onSubmit={submit}>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Main Form Section */}
+              <div className="lg:col-span-2">
+                <FormSection
+                  title="School Information"
+                  description={`Update the details for ${school.name}`}
+                  icon={School}
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <FormField
+                      label="School Name"
+                      name="name"
+                      type="text"
+                      value={data.name}
+                      onChange={(value) => setData('name', value)}
+                      placeholder="Enter school name"
+                      required
+                      error={errors.name}
+                      icon={Building2}
+                      helpText="The official name of the school"
+                    />
 
-                {/* School Code */}
-                <div className="space-y-2">
-                  <label htmlFor="code" className="text-sm font-medium text-foreground">
-                    School Code *
-                  </label>
-                  <input
-                    id="code"
-                    type="text"
-                    value={data.code}
-                    onChange={(e) => setData('code', e.target.value)}
-                    className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
-                    placeholder="Enter unique school code"
-                    required
-                  />
-                  {errors.code && (
-                    <div className="flex items-center space-x-2 text-sm text-destructive">
-                      <AlertCircle className="h-4 w-4" />
-                      <span>{errors.code}</span>
-                    </div>
-                  )}
-                </div>
+                    <FormField
+                      label="School Code"
+                      name="code"
+                      type="text"
+                      value={data.code}
+                      onChange={(value) => setData('code', value)}
+                      placeholder="Enter unique school code"
+                      required
+                      error={errors.code}
+                      icon={Hash}
+                      helpText="A unique identifier for the school"
+                    />
 
-                {/* Address */}
-                <div className="space-y-2">
-                  <label htmlFor="address" className="text-sm font-medium text-foreground">
-                    Address *
-                  </label>
-                  <textarea
-                    id="address"
+                    <FormField
+                      label="Email Address"
+                      name="email"
+                      type="email"
+                      value={data.email}
+                      onChange={(value) => setData('email', value)}
+                      placeholder="Enter school email"
+                      required
+                      error={errors.email}
+                      icon={Mail}
+                      helpText="Primary contact email for the school"
+                    />
+
+                    <FormField
+                      label="Phone Number"
+                      name="phone_number"
+                      type="tel"
+                      value={data.phone_number}
+                      onChange={(value) => setData('phone_number', value)}
+                      placeholder="Enter phone number"
+                      required
+                      error={errors.phone_number}
+                      icon={Phone}
+                      helpText="Primary contact phone number"
+                    />
+                  </div>
+
+                  <FormField
+                    label="Address"
+                    name="address"
+                    type="textarea"
                     value={data.address}
-                    onChange={(e) => setData('address', e.target.value)}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
-                    placeholder="Enter school address"
+                    onChange={(value) => setData('address', value)}
+                    placeholder="Enter complete school address"
                     required
+                    error={errors.address}
+                    icon={MapPin}
+                    helpText="Complete physical address of the school"
+                    rows={4}
                   />
-                  {errors.address && (
-                    <div className="flex items-center space-x-2 text-sm text-destructive">
-                      <AlertCircle className="h-4 w-4" />
-                      <span>{errors.address}</span>
-                    </div>
-                  )}
-                </div>
+                </FormSection>
+              </div>
 
-                {/* Email */}
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium text-foreground">
-                    Email Address *
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={data.email}
-                    onChange={(e) => setData('email', e.target.value)}
-                    className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
-                    placeholder="Enter school email"
-                    required
-                  />
-                  {errors.email && (
-                    <div className="flex items-center space-x-2 text-sm text-destructive">
-                      <AlertCircle className="h-4 w-4" />
-                      <span>{errors.email}</span>
+              {/* Sidebar */}
+              <div className="space-y-6">
+                <FormSection
+                  title="Quick Actions"
+                  description="Common tasks after updating"
+                  className="sticky top-6"
+                >
+                  <div className="space-y-4">
+                    <div className="p-4 bg-accent rounded-lg">
+                      <h4 className="font-medium text-foreground mb-2 flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-green-600" />
+                        Next Steps
+                      </h4>
+                      <ul className="text-sm text-muted-foreground space-y-1">
+                        <li>• Review updated information</li>
+                        <li>• Check branch associations</li>
+                        <li>• Update user permissions</li>
+                        <li>• Notify stakeholders</li>
+                      </ul>
                     </div>
-                  )}
-                </div>
-
-                {/* Phone Number */}
-                <div className="space-y-2">
-                  <label htmlFor="phone_number" className="text-sm font-medium text-foreground">
-                    Phone Number *
-                  </label>
-                  <input
-                    id="phone_number"
-                    type="tel"
-                    value={data.phone_number}
-                    onChange={(e) => setData('phone_number', e.target.value)}
-                    className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
-                    placeholder="Enter phone number"
-                    required
-                  />
-                  {errors.phone_number && (
-                    <div className="flex items-center space-x-2 text-sm text-destructive">
-                      <AlertCircle className="h-4 w-4" />
-                      <span>{errors.phone_number}</span>
+                    
+                    <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                      <h4 className="font-medium text-foreground mb-2">Tips</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Changes to school information will be reflected across all 
+                        associated branches and user accounts.
+                      </p>
                     </div>
-                  )}
-                </div>
 
-                {/* Submit Buttons */}
-                <div className="flex items-center justify-end space-x-4 pt-6">
-                  <Link href="/schools">
-                    <Button variant="outline" type="button">
-                      Cancel
-                    </Button>
-                  </Link>
-                  <Button type="submit" disabled={processing}>
-                    {processing ? 'Updating...' : 'Update School'}
-                    <Save className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
+                    <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
+                      <h4 className="font-medium text-foreground mb-2">Best Practices</h4>
+                      <ul className="text-sm text-muted-foreground space-y-1">
+                        <li>• Verify all contact information</li>
+                        <li>• Ensure code uniqueness</li>
+                        <li>• Update related documents</li>
+                        <li>• Communicate changes</li>
+                      </ul>
+                    </div>
+                  </div>
+                </FormSection>
+              </div>
+            </div>
+
+            {/* Form Actions */}
+            <FormActions
+              cancelHref="/schools"
+              cancelLabel="Cancel"
+              submitLabel="Update School"
+              isLoading={processing}
+              loadingLabel="Updating School..."
+              disabled={processing}
+            />
+          </form>
         </div>
       </div>
     </MainLayout>

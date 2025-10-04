@@ -5,7 +5,7 @@ import FormSection from '../../components/ui/FormSection';
 import FormField from '../../components/ui/FormField';
 import FormActions from '../../components/ui/FormActions';
 import PageHeader from '../../components/ui/PageHeader';
-import { Building2, School, Phone, MapPin, Hash, Users } from 'lucide-react';
+import { Building2, School, Phone, MapPin, Hash, Users, CheckCircle } from 'lucide-react';
 
 interface School {
   id: number;
@@ -144,7 +144,10 @@ const CreateBranch: React.FC<CreateBranchProps> = ({ schools }) => {
                 >
                   <div className="space-y-4">
                     <div className="p-4 bg-accent rounded-lg">
-                      <h4 className="font-medium text-foreground mb-2">Next Steps</h4>
+                      <h4 className="font-medium text-foreground mb-2 flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-green-600" />
+                        Next Steps
+                      </h4>
                       <ul className="text-sm text-muted-foreground space-y-1">
                         <li>• Assign branch manager</li>
                         <li>• Set up classrooms</li>
@@ -167,6 +170,16 @@ const CreateBranch: React.FC<CreateBranchProps> = ({ schools }) => {
                         This branch will be associated with the selected school and 
                         will inherit some of its settings and configurations.
                       </p>
+                    </div>
+
+                    <div className="p-4 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
+                      <h4 className="font-medium text-foreground mb-2">Best Practices</h4>
+                      <ul className="text-sm text-muted-foreground space-y-1">
+                        <li>• Use descriptive location names</li>
+                        <li>• Keep codes short and memorable</li>
+                        <li>• Verify contact information</li>
+                        <li>• Include complete addresses</li>
+                      </ul>
                     </div>
                   </div>
                 </FormSection>

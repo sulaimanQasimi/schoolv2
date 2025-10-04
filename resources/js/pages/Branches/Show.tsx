@@ -1,9 +1,11 @@
 import React from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import MainLayout from '../../layouts/MainLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/Card';
-import { Button } from '../../components/ui/Button';
-import { ArrowLeft, Building2, School, Mail, Phone, MapPin, Edit, Trash2 } from 'lucide-react';
+import { DetailCard, DetailItem } from '../../components/ui/DetailCard';
+import ActionCard from '../../components/ui/ActionCard';
+import StatsCard from '../../components/ui/StatsCard';
+import PageHeader from '../../components/ui/PageHeader';
+import { Building2, School, Phone, MapPin, Edit, Trash2, Hash, Calendar } from 'lucide-react';
 
 interface School {
   id: number;
@@ -25,135 +27,138 @@ interface ShowBranchProps {
 }
 
 const ShowBranch: React.FC<ShowBranchProps> = ({ branch }) => {
+  const handleDelete = () => {
+    if (confirm(`Are you sure you want to delete "${branch.name}"? This action cannot be undone.`)) {
+      router.delete(`/branches/${branch.id}`, {
+        onSuccess: () => {
+          // Optionally show success message
+        },
+        onError: (errors) => {
+          console.error('Delete failed:', errors);
+          alert('Failed to delete branch. Please try again.');
+        }
+      });
+    }
+  };
+
   return (
     <MainLayout>
       <Head title={branch.name} />
       
-      <div className="space-y-6">
+      <div className="space-y-8">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Link href="/branches">
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Branches
-              </Button>
-            </Link>
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">{branch.name}</h1>
-              <p className="text-muted-foreground">Branch Details</p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Link href={`/branches/${branch.id}/edit`}>
-              <Button variant="outline">
-                <Edit className="mr-2 h-4 w-4" />
-                Edit
-              </Button>
-            </Link>
-            <Button variant="destructive">
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete
-            </Button>
-          </div>
-        </div>
+        <PageHeader
+          title={branch.name}
+          description="Branch Details"
+          backHref="/branches"
+          backLabel="Back to Branches"
+          primaryAction={{
+            label: 'Edit Branch',
+            href: `/branches/${branch.id}/edit`,
+            icon: Edit,
+          }}
+          secondaryActions={[
+            {
+              label: 'Delete',
+              href: '#',
+              icon: Trash2,
+              variant: 'destructive',
+              onClick: handleDelete,
+            },
+          ]}
+        />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Branch Information */}
           <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Building2 className="h-5 w-5" />
-                  <span>Branch Information</span>
-                </CardTitle>
-                <CardDescription>
-                  Details about {branch.name}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-muted-foreground">Branch Name</label>
-                    <p className="text-foreground font-medium">{branch.name}</p>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-muted-foreground">Branch Code</label>
-                    <p className="text-foreground font-medium">{branch.code}</p>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-muted-foreground">Phone</label>
-                    <div className="flex items-center space-x-2">
-                      <Phone className="h-4 w-4 text-muted-foreground" />
-                      <p className="text-foreground">{branch.phone_number}</p>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-muted-foreground">School</label>
-                    <div className="flex items-center space-x-2">
-                      <School className="h-4 w-4 text-muted-foreground" />
-                      <Link 
-                        href={`/schools/${branch.school.id}`}
-                        className="text-primary hover:text-primary/80 font-medium"
-                      >
-                        {branch.school.name}
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-muted-foreground">Address</label>
-                  <div className="flex items-start space-x-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground mt-1" />
-                    <p className="text-foreground">{branch.address}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <DetailCard
+              title="Branch Information"
+              description={`Details about ${branch.name}`}
+              icon={Building2}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <DetailItem
+                  label="Branch Name"
+                  value={branch.name}
+                  icon={Building2}
+                />
+                <DetailItem
+                  label="Branch Code"
+                  value={branch.code}
+                  icon={Hash}
+                />
+                <DetailItem
+                  label="Phone Number"
+                  value={branch.phone_number}
+                  icon={Phone}
+                />
+                <DetailItem
+                  label="School"
+                  value={
+                    <Link 
+                      href={`/schools/${branch.school.id}`}
+                      className="text-primary hover:text-primary/80 font-medium"
+                    >
+                      {branch.school.name}
+                    </Link>
+                  }
+                  icon={School}
+                />
+              </div>
+              
+              <DetailItem
+                label="Address"
+                value={branch.address}
+                icon={MapPin}
+              />
+            </DetailCard>
           </div>
 
           {/* Stats and Actions */}
           <div className="space-y-6">
-            {/* Stats Card */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Statistics</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Created</span>
-                  <span className="text-sm text-foreground">
-                    {new Date(branch.created_at).toLocaleDateString()}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">School</span>
-                  <span className="text-sm text-foreground">{branch.school.name}</span>
-                </div>
-              </CardContent>
-            </Card>
+            <StatsCard
+              title="Statistics"
+              icon={Building2}
+              stats={[
+                {
+                  label: 'Created',
+                  value: new Date(branch.created_at).toLocaleDateString(),
+                  icon: Calendar,
+                  description: 'Date added',
+                },
+                {
+                  label: 'School',
+                  value: branch.school.name,
+                  icon: School,
+                  description: 'Parent school',
+                },
+              ]}
+            />
 
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <Link href={`/branches/${branch.id}/edit`} className="w-full">
-                  <Button className="w-full justify-start">
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit Branch
-                  </Button>
-                </Link>
-                <Link href={`/schools/${branch.school.id}`} className="w-full">
-                  <Button variant="outline" className="w-full justify-start">
-                    <School className="mr-2 h-4 w-4" />
-                    View School
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+            <ActionCard
+              title="Quick Actions"
+              description="Common tasks for this branch"
+              icon={Building2}
+              actions={[
+                {
+                  label: 'Edit Branch',
+                  href: `/branches/${branch.id}/edit`,
+                  icon: Edit,
+                },
+                {
+                  label: 'View School',
+                  href: `/schools/${branch.school.id}`,
+                  icon: School,
+                  variant: 'outline',
+                },
+                {
+                  label: 'Delete Branch',
+                  onClick: handleDelete,
+                  icon: Trash2,
+                  variant: 'destructive',
+                },
+              ]}
+            />
           </div>
         </div>
       </div>

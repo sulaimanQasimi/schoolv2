@@ -22,6 +22,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // Branch routes
     Route::resource('branches', App\Http\Controllers\BranchController::class);
+    
+    // Department routes
+    Route::resource('departments', App\Http\Controllers\DepartmentController::class);
 });
 
 require __DIR__.'/settings.php';
