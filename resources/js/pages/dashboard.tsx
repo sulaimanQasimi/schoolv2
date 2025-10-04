@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/react';
 import MainLayout from '../layouts/MainLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
+import NotificationTest from '../components/NotificationTest';
 import { 
   School, 
   Building2, 
@@ -159,6 +160,9 @@ const Dashboard: React.FC = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Notification Test */}
+        <NotificationTest />
 
         {/* Notifications */}
         <Card>

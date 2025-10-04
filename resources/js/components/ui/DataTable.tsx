@@ -23,7 +23,7 @@ interface Column {
 interface Action {
   label: string;
   icon: React.ComponentType<any>;
-  href?: string;
+  href?: string | ((item: any) => string);
   onClick?: (item: any) => void;
   variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
   className?: string;

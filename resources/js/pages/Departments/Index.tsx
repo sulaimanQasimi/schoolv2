@@ -59,6 +59,10 @@ interface DepartmentsIndexProps {
 }
 
 const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ departments, branches = [], filters = {} }) => {
+  // Debug logging
+  console.log('Departments data:', departments);
+  console.log('Departments data array:', departments?.data);
+  
   const handleSearch = (searchFilters: any) => {
     router.get('/departments', searchFilters, { preserveState: true });
   };
@@ -92,8 +96,14 @@ const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ departments, branch
       label: 'Branch',
       render: (item: Department) => (
         <div>
-          <div className="font-medium text-foreground">{item.branch?.name || 'Unknown Branch'}</div>
-          <div className="text-sm text-muted-foreground">{item.branch?.school?.name || 'Unknown School'}</div>
+          <div className="font-medium text-foreground">
+            {item && item.branch && item.branch.name ? item.branch.name : 'Unknown Branch'}
+          </div>
+          <div className="text-sm text-muted-foreground">
+            {item && item.branch && item.branch.school && item.branch.school.name 
+              ? item.branch.school.name 
+              : 'Unknown School'}
+          </div>
         </div>
       ),
     },
@@ -104,7 +114,7 @@ const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ departments, branch
         <div className="flex items-center space-x-2">
           <User className="h-4 w-4 text-muted-foreground" />
           <span className="text-foreground">
-            {item.head?.name || 'Not assigned'}
+            {item && item.head && item.head.name ? item.head.name : 'Not assigned'}
           </span>
         </div>
       ),
@@ -194,10 +204,10 @@ const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ departments, branch
         />
 
         {/* Data Table */}
-        <DataTable
-          title="Department Directory"
-          description="A list of all departments across your organization"
-          data={departments?.data || []}
+                <DataTable
+                  title="Department Directory"
+                  description="A list of all departments across your organization"
+                  data={Array.isArray(departments?.data) ? departments.data : []}
           columns={columns}
           actions={[
             {

@@ -3,6 +3,12 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\School;
+use App\Models\Branch;
+use App\Models\Department;
+use App\Observers\SchoolObserver;
+use App\Observers\BranchObserver;
+use App\Observers\DepartmentObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Register model observers
+        School::observe(SchoolObserver::class);
+        Branch::observe(BranchObserver::class);
+        Department::observe(DepartmentObserver::class);
     }
 }
