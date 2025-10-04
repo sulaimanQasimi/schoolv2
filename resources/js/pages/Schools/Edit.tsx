@@ -6,6 +6,7 @@ import FormField from '../../components/ui/FormField';
 import FormActions from '../../components/ui/FormActions';
 import PageHeader from '../../components/ui/PageHeader';
 import { School, Building2, Mail, Phone, MapPin, Hash, Users, CheckCircle } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n/translate';
 
 interface School {
   id: number;
@@ -21,6 +22,7 @@ interface EditSchoolProps {
 }
 
 const EditSchool: React.FC<EditSchoolProps> = ({ school }) => {
+  const { t } = useTranslation();
   const { data, setData, put, processing, errors } = useForm({
     name: school.name,
     code: school.code,
@@ -36,17 +38,17 @@ const EditSchool: React.FC<EditSchoolProps> = ({ school }) => {
 
   return (
     <MainLayout>
-      <Head title={`Edit ${school.name}`} />
+      <Head title={t('schools.edit')} />
       
       <div className="space-y-8">
         {/* Header */}
         <PageHeader
-          title={`Edit ${school.name}`}
-          description="Update school information"
+          title={t('schools.edit')}
+          description={t('schools.edit_description')}
           backHref="/schools"
-          backLabel="Back to Schools"
+          backLabel={t('schools.back_to_schools')}
           primaryAction={{
-            label: 'View School',
+            label: t('schools.view_school'),
             href: `/schools/${school.id}`,
             icon: School,
           }}
@@ -59,75 +61,75 @@ const EditSchool: React.FC<EditSchoolProps> = ({ school }) => {
               {/* Main Form Section */}
               <div className="lg:col-span-2">
                 <FormSection
-                  title="School Information"
-                  description={`Update the details for ${school.name}`}
+                  title={t('schools.information')}
+                  description={t('schools.edit_information_description', { name: school.name })}
                   icon={School}
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
-                      label="School Name"
+                      label={t('schools.name')}
                       name="name"
                       type="text"
                       value={data.name}
                       onChange={(value) => setData('name', value)}
-                      placeholder="Enter school name"
+                      placeholder={t('schools.name_placeholder')}
                       required
                       error={errors.name}
                       icon={Building2}
-                      helpText="The official name of the school"
+                      helpText={t('schools.name_help')}
                     />
 
                     <FormField
-                      label="School Code"
+                      label={t('schools.code')}
                       name="code"
                       type="text"
                       value={data.code}
                       onChange={(value) => setData('code', value)}
-                      placeholder="Enter unique school code"
+                      placeholder={t('schools.code_placeholder')}
                       required
                       error={errors.code}
                       icon={Hash}
-                      helpText="A unique identifier for the school"
+                      helpText={t('schools.code_help')}
                     />
 
                     <FormField
-                      label="Email Address"
+                      label={t('schools.email')}
                       name="email"
                       type="email"
                       value={data.email}
                       onChange={(value) => setData('email', value)}
-                      placeholder="Enter school email"
+                      placeholder={t('schools.email_placeholder')}
                       required
                       error={errors.email}
                       icon={Mail}
-                      helpText="Primary contact email for the school"
+                      helpText={t('schools.email_help')}
                     />
 
                     <FormField
-                      label="Phone Number"
+                      label={t('schools.phone')}
                       name="phone_number"
                       type="tel"
                       value={data.phone_number}
                       onChange={(value) => setData('phone_number', value)}
-                      placeholder="Enter phone number"
+                      placeholder={t('schools.phone_placeholder')}
                       required
                       error={errors.phone_number}
                       icon={Phone}
-                      helpText="Primary contact phone number"
+                      helpText={t('schools.phone_help')}
                     />
                   </div>
 
                   <FormField
-                    label="Address"
+                    label={t('schools.address')}
                     name="address"
                     type="textarea"
                     value={data.address}
                     onChange={(value) => setData('address', value)}
-                    placeholder="Enter complete school address"
+                    placeholder={t('schools.address_placeholder')}
                     required
                     error={errors.address}
                     icon={MapPin}
-                    helpText="Complete physical address of the school"
+                    helpText={t('schools.address_help')}
                     rows={4}
                   />
                 </FormSection>
@@ -179,10 +181,10 @@ const EditSchool: React.FC<EditSchoolProps> = ({ school }) => {
             {/* Form Actions */}
             <FormActions
               cancelHref="/schools"
-              cancelLabel="Cancel"
-              submitLabel="Update School"
+              cancelLabel={t('common.cancel')}
+              submitLabel={t('schools.update')}
               isLoading={processing}
-              loadingLabel="Updating School..."
+              loadingLabel={t('schools.updating')}
               disabled={processing}
             />
           </form>

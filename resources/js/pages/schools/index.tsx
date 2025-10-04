@@ -1,235 +1,229 @@
 import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import MainLayout from '../../layouts/MainLayout';
-import SearchFilters from '../../components/ui/SearchFilters';
-import StatsCard from '../../components/ui/StatsCard';
-import DataTable from '../../components/ui/DataTable';
-import PageHeader from '../../components/ui/PageHeader';
-import { Plus, School, Building2, Users, Mail, Phone, MapPin, Eye, Edit, Trash2 } from 'lucide-react';
+import MainLayout from '@/layouts/MainLayout';
+import SearchFilters from '@/components/ui/SearchFilters';
+import StatsCard from '@/components/ui/StatsCard';
+import DataTable from '@/components/ui/DataTable';
+import PageHeader from '@/components/ui/PageHeader';
+import { Plus, Building2, School, MapPin, Phone, Users, Eye, Edit, Trash2 } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n/translate';
 
 interface School {
-  id: number;
-  name: string;
-  code: string;
-  address: string;
-  email: string;
-  phone_number: string;
-  branches_count: number;
-  created_at: string;
+    id: number;
+    name: string;
+    code: string;
+    address: string;
+    email: string;
+    phone_number: string;
+    branches_count?: number;
+    created_at: string;
+    updated_at: string;
 }
 
 interface SchoolsIndexProps {
-  schools: {
+    schools: {
     data: School[];
-    links: any[];
-    meta: any;
-  };
-  filters: {
-    search?: string;
-    date_from?: string;
-    date_to?: string;
-    sort_by?: string;
-    sort_order?: string;
-  };
+        links: any[];
+        meta: any;
+    };
+    filters: {
+        search?: string;
+        date_from?: string;
+        date_to?: string;
+        sort_by?: string;
+        sort_order?: string;
+    };
 }
 
 const SchoolsIndex: React.FC<SchoolsIndexProps> = ({ schools, filters }) => {
-  const handleSearch = (searchFilters: any) => {
-    router.get('/schools', searchFilters, {
-      preserveState: true,
-      replace: true,
-    });
-  };
+    const { t } = useTranslation();
 
-  const clearFilters = () => {
-    router.get('/schools', {}, {
-      preserveState: true,
-      replace: true,
-    });
-  };
+    const handleSearch = (searchFilters: any) => {
+        router.get('/schools', searchFilters, {
+            preserveState: true,
+            replace: true,
+        });
+    };
 
-  const handlePageChange = (page: number) => {
-    router.get('/schools', { ...filters, page }, {
-      preserveState: true,
-      replace: true,
-    });
-  };
+    const clearFilters = () => {
+        router.get('/schools', {}, {
+            preserveState: true,
+            replace: true,
+        });
+    };
 
-  const columns = [
-    {
-      key: 'name',
-      label: 'School',
-      render: (value: string, school: School) => (
-        <div className="flex items-center space-x-3">
-          <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center">
-            <School className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-foreground">{school.name}</h3>
-            <p className="text-sm text-muted-foreground">{school.code}</p>
-          </div>
-        </div>
-      ),
-    },
-    {
-      key: 'email',
-      label: 'Contact',
-      render: (value: string, school: School) => (
-        <div className="space-y-1">
-          <div className="flex items-center space-x-2">
-            <Mail className="h-3 w-3 text-muted-foreground" />
-            <span className="text-sm text-foreground">{school.email}</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Phone className="h-3 w-3 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">{school.phone_number}</span>
-          </div>
-        </div>
-      ),
-    },
-    {
-      key: 'address',
-      label: 'Location',
-      render: (value: string) => (
-        <div className="flex items-start space-x-2">
-          <MapPin className="h-3 w-3 text-muted-foreground mt-1" />
-          <span className="text-sm text-foreground">{value}</span>
-        </div>
-      ),
-    },
-    {
-      key: 'branches_count',
-      label: 'Branches',
-      render: (value: number) => (
-        <div className="text-center">
-          <span className="text-2xl font-bold text-foreground">{value}</span>
-          <p className="text-xs text-muted-foreground">branches</p>
-        </div>
-      ),
-    },
-  ];
+    const handlePageChange = (page: number) => {
+        router.get('/schools', { ...filters, page }, {
+            preserveState: true,
+            replace: true,
+        });
+    };
 
-  return (
-    <MainLayout>
-      <Head title="Schools" />
-      
-      <div className="space-y-6">
-        {/* Header */}
-        <PageHeader
-          title="Schools"
-          description="Manage your school institutions"
-          primaryAction={{
-            label: 'Add School',
-            href: '/schools/create',
-            icon: Plus,
-          }}
-        />
+    const columns = [
+        {
+            key: 'name',
+            label: 'School',
+            render: (value: string, school: School) => (
+                <div className="flex items-center space-x-3">
+                    <div className="h-10 w-10 rounded-lg bg-chart-1 flex items-center justify-center">
+                        <School className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                        <h3 className="font-semibold text-foreground">{school.name}</h3>
+                        <p className="text-sm text-muted-foreground">{school.code}</p>
+                    </div>
+                </div>
+            ),
+        },
+        {
+            key: 'email',
+            label: 'Contact',
+            render: (value: string) => (
+                <div className="flex items-center space-x-2">
+                    <Phone className="h-3 w-3 text-muted-foreground" />
+                    <span className="text-sm text-foreground">{value}</span>
+                </div>
+            ),
+        },
+        {
+            key: 'address',
+            label: 'Location',
+            render: (value: string) => (
+                <div className="flex items-start space-x-2">
+                    <MapPin className="h-3 w-3 text-muted-foreground mt-1" />
+                    <span className="text-sm text-foreground">{value}</span>
+                </div>
+            ),
+        },
+        {
+            key: 'branches_count',
+            label: 'Branches',
+            render: (value: number) => (
+                <div className="flex items-center space-x-2">
+                    <Building2 className="h-3 w-3 text-muted-foreground" />
+                    <span className="text-sm text-foreground">{value || 0}</span>
+                </div>
+            ),
+        },
+    ];
 
-        {/* Search and Filters */}
-        <SearchFilters
-          searchPlaceholder="Search schools by name, code, email, address, or phone..."
-          filters={filters}
-          onSearch={handleSearch}
-          onClear={clearFilters}
-          sortOptions={[
-            { value: 'created_at', label: 'Created Date' },
-            { value: 'name', label: 'Name' },
-            { value: 'code', label: 'Code' },
-            { value: 'email', label: 'Email' },
-            { value: 'branches_count', label: 'Branches Count' },
-          ]}
-        />
+    return (
+        <MainLayout>
+            <Head title={t('schools.title')} />
+            
+            <div className="space-y-6">
+                {/* Header */}
+                <PageHeader
+                    title={t('schools.title')}
+                    description={t('schools.description')}
+                    primaryAction={{
+                        label: t('schools.create'),
+                        href: '/schools/create',
+                        icon: Plus,
+                    }}
+                />
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <StatsCard
-            title="Total Schools"
-            value={schools.data.length}
-            description="+2 from last month"
-            icon={School}
-            trend={{ value: "2", isPositive: true }}
-          />
-          
-          <StatsCard
-            title="Total Branches"
-            value={schools.data.reduce((acc, school) => acc + school.branches_count, 0)}
-            description="Across all schools"
-            icon={Building2}
-          />
-          
-          <StatsCard
-            title="Active Users"
-            value="1,234"
-            description="+12% from last month"
-            icon={Users}
-            trend={{ value: "12%", isPositive: true }}
-          />
-        </div>
+                {/* Search and Filters */}
+                <SearchFilters
+                    searchPlaceholder={t('schools.search_placeholder')}
+                    filters={filters}
+                    onSearch={handleSearch}
+                    onClear={clearFilters}
+                    sortOptions={[
+                        { value: 'created_at', label: 'Created Date' },
+                        { value: 'name', label: 'Name' },
+                        { value: 'code', label: 'Code' },
+                    ]}
+                />
 
-        {/* Schools Table */}
-        <DataTable
-          title="School Directory"
-          description="A list of all schools in your system"
-          data={schools.data}
-          columns={columns}
-          actions={[
-            {
-              label: 'View',
-              icon: Eye,
-              href: (item: any) => `/schools/${item.id}`,
-              variant: 'outline',
-            },
-            {
-              label: 'Edit',
-              icon: Edit,
-              href: (item: any) => `/schools/${item.id}/edit`,
-              variant: 'outline',
-            },
-            {
-              label: 'Delete',
-              icon: Trash2,
-              onClick: (item: any) => {
-                if (confirm(`Are you sure you want to delete "${item.name}"? This action cannot be undone.`)) {
-                  router.delete(`/schools/${item.id}`, {
-                    onSuccess: () => {
-                      // Optionally show success message
-                    },
-                    onError: (errors) => {
-                      console.error('Delete failed:', errors);
-                      alert('Failed to delete school. Please try again.');
-                    }
-                  });
-                }
-              },
-              variant: 'destructive',
-            },
-          ]}
-          primaryAction={{
-            label: 'Add School',
-            href: '/schools/create',
-            icon: Plus,
-          }}
-          emptyState={{
-            icon: School,
-            title: 'No schools found',
-            description: 'Get started by creating your first school.',
-            action: {
-              label: 'Create School',
-              href: '/schools/create',
-            },
-          }}
-          pagination={schools.meta ? {
-            currentPage: schools.meta.current_page,
-            lastPage: schools.meta.last_page,
-            total: schools.meta.total,
-            perPage: schools.meta.per_page,
-            links: schools.links,
-          } : undefined}
-          onPageChange={handlePageChange}
-        />
-      </div>
-    </MainLayout>
-  );
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <StatsCard
+                        title={t('schools.total_schools')}
+                        value={schools.data.length}
+                        description={t('schools.total_schools_description')}
+                        icon={School}
+                    />
+                    
+                    <StatsCard
+                        title={t('schools.total_branches')}
+                        value={schools.data.reduce((sum, school) => sum + (school.branches_count || 0), 0)}
+                        description={t('schools.total_branches_description')}
+                        icon={Building2}
+                    />
+                    
+                    <StatsCard
+                        title={t('schools.locations')}
+                        value={new Set(schools.data.map(school => school.address.split(',')[0])).size}
+                        description={t('schools.locations_description')}
+                        icon={MapPin}
+                    />
+                                </div>
+
+                {/* Schools Table */}
+                <DataTable
+                    title={t('schools.all_schools')}
+                    description={t('schools.all_schools_description')}
+                    data={schools.data}
+                    columns={columns}
+                    actions={[
+                        {
+                            label: t('common.view'),
+                            icon: Eye,
+                            href: (item: any) => `/schools/${item.id}`,
+                            variant: 'outline',
+                        },
+                        {
+                            label: t('common.edit'),
+                            icon: Edit,
+                            href: (item: any) => `/schools/${item.id}/edit`,
+                            variant: 'outline',
+                        },
+                        {
+                            label: t('common.delete'),
+                            icon: Trash2,
+                            onClick: (item: any) => {
+                                if (confirm(t('schools.delete_confirm_detailed', { name: item.name }))) {
+                                    router.delete(`/schools/${item.id}`, {
+                                        onSuccess: () => {
+                                            // Optionally show success message
+                                        },
+                                        onError: (errors) => {
+                                            console.error('Delete failed:', errors);
+                                            alert(t('schools.delete_failed'));
+                                        }
+                                    });
+                                }
+                            },
+                            variant: 'destructive',
+                        },
+                    ]}
+                    primaryAction={{
+                        label: t('schools.create'),
+                        href: '/schools/create',
+                        icon: Plus,
+                    }}
+                    emptyState={{
+                        icon: School,
+                        title: t('schools.no_schools'),
+                        description: t('schools.no_schools_description'),
+                        action: {
+                            label: t('schools.create'),
+                            href: '/schools/create',
+                        },
+                    }}
+                    pagination={schools.meta ? {
+                        currentPage: schools.meta.current_page,
+                        lastPage: schools.meta.last_page,
+                        total: schools.meta.total,
+                        perPage: schools.meta.per_page,
+                        links: schools.links,
+                    } : undefined}
+                    onPageChange={handlePageChange}
+                />
+            </div>
+        </MainLayout>
+    );
 };
 
 export default SchoolsIndex;

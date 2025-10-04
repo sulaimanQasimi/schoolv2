@@ -6,6 +6,7 @@ import ActionCard from '../../components/ui/ActionCard';
 import StatsCard from '../../components/ui/StatsCard';
 import PageHeader from '../../components/ui/PageHeader';
 import { School, Building2, Mail, Phone, MapPin, Edit, Trash2, Plus, Users, Calendar, Hash } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n/translate';
 
 interface Branch {
   id: number;
@@ -32,15 +33,16 @@ interface ShowSchoolProps {
 }
 
 const ShowSchool: React.FC<ShowSchoolProps> = ({ school }) => {
+  const { t } = useTranslation();
   const handleDelete = () => {
-    if (confirm(`Are you sure you want to delete "${school.name}"? This action cannot be undone.`)) {
+    if (confirm(t('schools.delete_confirm_detailed', { name: school.name }))) {
       router.delete(`/schools/${school.id}`, {
         onSuccess: () => {
           // Optionally show success message
         },
         onError: (errors) => {
           console.error('Delete failed:', errors);
-          alert('Failed to delete school. Please try again.');
+          alert(t('schools.delete_failed'));
         }
       });
     }
@@ -54,17 +56,17 @@ const ShowSchool: React.FC<ShowSchoolProps> = ({ school }) => {
         {/* Header */}
         <PageHeader
           title={school.name}
-          description="School Details"
+          description={t('schools.details')}
           backHref="/schools"
-          backLabel="Back to Schools"
+          backLabel={t('schools.back_to_schools')}
           primaryAction={{
-            label: 'Edit School',
+            label: t('schools.edit'),
             href: `/schools/${school.id}/edit`,
             icon: Edit,
           }}
           secondaryActions={[
             {
-              label: 'Delete',
+              label: t('common.delete'),
               href: '#',
               icon: Trash2,
               variant: 'destructive',
@@ -77,35 +79,35 @@ const ShowSchool: React.FC<ShowSchoolProps> = ({ school }) => {
           {/* School Information */}
           <div className="lg:col-span-2">
             <DetailCard
-              title="School Information"
-              description={`Basic details about ${school.name}`}
+              title={t('schools.information')}
+              description={t('schools.basic_details', { name: school.name })}
               icon={School}
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <DetailItem
-                  label="School Name"
+                  label={t('schools.name')}
                   value={school.name}
                   icon={Building2}
                 />
                 <DetailItem
-                  label="School Code"
+                  label={t('schools.code')}
                   value={school.code}
                   icon={Hash}
                 />
                 <DetailItem
-                  label="Email Address"
+                  label={t('schools.email')}
                   value={school.email}
                   icon={Mail}
                 />
                 <DetailItem
-                  label="Phone Number"
+                  label={t('schools.phone')}
                   value={school.phone_number}
                   icon={Phone}
                 />
               </div>
               
               <DetailItem
-                label="Address"
+                label={t('schools.address')}
                 value={school.address}
                 icon={MapPin}
               />
@@ -115,42 +117,42 @@ const ShowSchool: React.FC<ShowSchoolProps> = ({ school }) => {
           {/* Stats and Actions */}
           <div className="space-y-6">
             <StatsCard
-              title="Statistics"
+              title={t('schools.statistics')}
               icon={Users}
               stats={[
                 {
-                  label: 'Total Branches',
+                  label: t('schools.total_branches'),
                   value: school.branches.length,
                   icon: Building2,
-                  description: 'Active branches',
+                  description: t('schools.active_branches'),
                 },
                 {
-                  label: 'Created',
+                  label: t('schools.created'),
                   value: new Date(school.created_at).toLocaleDateString(),
                   icon: Calendar,
-                  description: 'Date added',
+                  description: t('schools.date_added'),
                 },
               ]}
             />
 
             <ActionCard
-              title="Quick Actions"
-              description="Common tasks for this school"
+              title={t('schools.quick_actions')}
+              description={t('schools.quick_actions_school_description')}
               icon={Users}
               actions={[
                 {
-                  label: 'Add Branch',
+                  label: t('schools.add_branch'),
                   href: `/branches/create?school_id=${school.id}`,
                   icon: Plus,
                 },
                 {
-                  label: 'Edit School',
+                  label: t('schools.edit'),
                   href: `/schools/${school.id}/edit`,
                   icon: Edit,
                   variant: 'outline',
                 },
                 {
-                  label: 'Delete School',
+                  label: t('schools.delete_school'),
                   onClick: handleDelete,
                   icon: Trash2,
                   variant: 'destructive',
@@ -167,16 +169,16 @@ const ShowSchool: React.FC<ShowSchoolProps> = ({ school }) => {
               <div>
                 <CardTitle className="flex items-center space-x-2">
                   <Building2 className="h-5 w-5" />
-                  <span>Branches ({school.branches.length})</span>
+                  <span>{t('schools.branches')} ({school.branches.length})</span>
                 </CardTitle>
                 <CardDescription>
-                  All branches associated with {school.name}
+                  {t('schools.branches_description', { name: school.name })}
                 </CardDescription>
               </div>
               <Link href={`/branches/create?school_id=${school.id}`}>
                 <Button>
                   <Plus className="mr-2 h-4 w-4" />
-                  Add Branch
+                  {t('schools.add_branch')}
                 </Button>
               </Link>
             </div>
@@ -202,12 +204,12 @@ const ShowSchool: React.FC<ShowSchoolProps> = ({ school }) => {
                     <div className="flex items-center space-x-2">
                       <Link href={`/branches/${branch.id}`}>
                         <Button variant="outline" size="sm">
-                          View
+                          {t('common.view')}
                         </Button>
                       </Link>
                       <Link href={`/branches/${branch.id}/edit`}>
                         <Button variant="outline" size="sm">
-                          Edit
+                          {t('common.edit')}
                         </Button>
                       </Link>
                     </div>
@@ -217,14 +219,14 @@ const ShowSchool: React.FC<ShowSchoolProps> = ({ school }) => {
             ) : (
               <div className="text-center py-8">
                 <Building2 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-foreground mb-2">No branches yet</h3>
+                <h3 className="text-lg font-semibold text-foreground mb-2">{t('schools.no_branches_yet')}</h3>
                 <p className="text-muted-foreground mb-4">
-                  This school doesn't have any branches yet.
+                  {t('schools.no_branches_description')}
                 </p>
                 <Link href={`/branches/create?school_id=${school.id}`}>
                   <Button>
                     <Plus className="mr-2 h-4 w-4" />
-                    Add First Branch
+                    {t('schools.add_first_branch')}
                   </Button>
                 </Link>
               </div>
