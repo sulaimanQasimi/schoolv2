@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '@/lib/i18n/language-context';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { Globe } from 'lucide-react';
@@ -34,7 +34,7 @@ export function LanguageSwitcher({ className, variant = 'default' }: LanguageSwi
               )}
               onClick={() => handleLanguageChange(language.code)}
             >
-              <Globe className="h-4 w-4 mr-2" />
+              <Globe className="h-4 w-4 mr-2 rtl:mr-0 rtl:ml-2" />
               <span>{language.name}</span>
             </Button>
           ))}
@@ -45,9 +45,10 @@ export function LanguageSwitcher({ className, variant = 'default' }: LanguageSwi
   // For minimal and default variants, use controlled dropdown
   const dropdownContent = (
     <DropdownMenuPrimitive.Portal>
-      <DropdownMenuPrimitive.Content
-        className="bg-popover text-popover-foreground z-50 min-w-[8rem] overflow-hidden rounded-md border p-1 shadow-md animate-in fade-in-80 data-[side=bottom]:slide-in-from-top-1 data-[side=left]:slide-in-from-right-1 data-[side=right]:slide-in-from-left-1 data-[side=top]:slide-in-from-bottom-1"
-        align="end"
+        <DropdownMenuPrimitive.Content
+          className="bg-popover text-popover-foreground z-50 min-w-[8rem] overflow-hidden rounded-md border p-1 shadow-md animate-in fade-in-80 data-[side=bottom]:slide-in-from-top-1 data-[side=left]:slide-in-from-right-1 data-[side=right]:slide-in-from-left-1 data-[side=top]:slide-in-from-bottom-1"
+          align="end"
+          alignOffset={-5}
         sideOffset={5}
         onEscapeKeyDown={() => setOpen(false)}
         onInteractOutside={() => setOpen(false)}

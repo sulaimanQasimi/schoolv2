@@ -87,7 +87,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       {/* Mobile sidebar */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-black/20" onClick={() => setSidebarOpen(false)} />
-        <div className="fixed inset-y-0 left-0 z-50 w-64 bg-sidebar border-r border-sidebar-border">
+        <div className="fixed inset-y-0 left-0 z-50 w-64 bg-sidebar border-r border-sidebar-border rtl:left-auto rtl:right-0 rtl:border-r-0 rtl:border-l">
           <div className="flex h-16 items-center justify-between px-4">
             <div className="flex items-center space-x-2">
               <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
@@ -113,7 +113,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                 }`}
               >
-                <item.icon className="mr-3 h-5 w-5" />
+                <item.icon className="mr-3 h-5 w-5 rtl:mr-0 rtl:ml-3" />
                 {item.name}
               </Link>
             ))}
@@ -127,8 +127,8 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       </div>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-sidebar border-r border-sidebar-border px-4 py-4">
+      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col rtl:left-auto rtl:right-0">
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-sidebar border-r border-sidebar-border rtl:border-r-0 rtl:border-l px-4 py-4">
           <div className="flex h-16 items-center space-x-2">
             <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
               <School className="h-5 w-5 text-primary-foreground" />
@@ -163,7 +163,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       </div>
 
       {/* Main content */}
-      <div className="lg:pl-64">
+      <div className="lg:pl-64 rtl:lg:pl-0 rtl:lg:pr-64">
         {/* Top navigation */}
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-border bg-background px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
           <button
@@ -197,14 +197,14 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 >
                   <Bell className="h-5 w-5" />
                   {unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 h-4 w-4 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 rtl:right-auto rtl:-left-1 h-4 w-4 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
                       {unreadCount}
                     </span>
                   )}
                 </button>
                 
                 {notificationDropdownOpen && (
-                  <div ref={notificationRef} className="absolute right-0 z-10 mt-2 w-80 rounded-lg bg-popover border border-border shadow-lg">
+                  <div ref={notificationRef} className="absolute right-0 rtl:right-auto rtl:left-0 z-10 mt-2 w-80 rounded-lg bg-popover border border-border shadow-lg">
                     <div className="p-4">
                       <div className="flex items-center justify-between mb-3">
                         <h3 className="text-sm font-semibold text-popover-foreground">Notifications</h3>
@@ -222,7 +222,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                           notifications.map((notification) => (
                             <div
                               key={notification.id}
-                              className={`flex items-start space-x-3 p-2 rounded-lg hover:bg-accent cursor-pointer ${
+                              className={`flex items-start space-x-3 rtl:space-x-reverse p-2 rounded-lg hover:bg-accent cursor-pointer ${
                                 !notification.read ? 'bg-accent/50' : ''
                               }`}
                               onClick={() => !notification.read && markAsRead(notification.id)}
@@ -245,7 +245,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                 </p>
                               </div>
                               {!notification.read && (
-                                <div className="h-2 w-2 bg-primary rounded-full mt-2"></div>
+                                <div className="h-2 w-2 bg-primary rounded-full mt-2 rtl:ml-0 rtl:mr-2"></div>
                               )}
                             </div>
                           ))
@@ -274,7 +274,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 </button>
 
                 {userDropdownOpen && (
-                  <div className="absolute right-0 z-10 mt-2 w-48 rounded-lg bg-popover border border-border shadow-lg">
+                  <div className="absolute right-0 rtl:right-auto rtl:left-0 z-10 mt-2 w-48 rounded-lg bg-popover border border-border shadow-lg">
                     <div className="py-1">
                       <div className="px-4 py-2 border-b border-border">
                         <p className="text-sm font-medium text-popover-foreground">{auth.user.name}</p>
@@ -285,14 +285,14 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         className="flex items-center px-4 py-2 text-sm text-popover-foreground hover:bg-accent"
                         onClick={() => setUserDropdownOpen(false)}
                       >
-                        <Settings className="mr-3 h-4 w-4" />
+                        <Settings className="mr-3 h-4 w-4 rtl:mr-0 rtl:ml-3" />
                         Settings
                       </Link>
                       <button
                         onClick={handleLogout}
                         className="flex w-full items-center px-4 py-2 text-sm text-popover-foreground hover:bg-accent"
                       >
-                        <LogOut className="mr-3 h-4 w-4" />
+                        <LogOut className="mr-3 h-4 w-4 rtl:mr-0 rtl:ml-3" />
                         Sign out
                       </button>
                     </div>
