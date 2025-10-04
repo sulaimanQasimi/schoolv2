@@ -46,4 +46,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the department where the user is the head.
+     */
+    public function headOfDepartment()
+    {
+        return $this->hasOne(Department::class, 'head_user_id');
+    }
 }

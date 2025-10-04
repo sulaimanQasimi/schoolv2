@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Branch extends Model
+class Department extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -16,11 +16,11 @@ class Branch extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'school_id',
+        'branch_id',
         'name',
         'code',
-        'address',
-        'phone_number',
+        'description',
+        'head_user_id',
     ];
 
     /**
@@ -35,18 +35,18 @@ class Branch extends Model
     ];
 
     /**
-     * Get the school that owns the branch.
+     * Get the branch that owns the department.
      */
-    public function school()
+    public function branch()
     {
-        return $this->belongsTo(School::class);
+        return $this->belongsTo(Branch::class);
     }
 
     /**
-     * Get the departments for the branch.
+     * Get the user who is the head of the department.
      */
-    public function departments()
+    public function head()
     {
-        return $this->hasMany(Department::class);
+        return $this->belongsTo(User::class, 'head_user_id');
     }
 }
