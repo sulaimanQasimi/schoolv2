@@ -7,6 +7,11 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
+// Redirect authenticated users to dashboard
+Route::get('/home', function () {
+    return redirect()->route('dashboard');
+})->middleware('auth');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
