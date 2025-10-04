@@ -13,10 +13,12 @@ interface StatItem {
 }
 
 interface StatsCardProps {
-  title: string;
+  title?: string;
   description?: string;
   icon?: React.ComponentType<any>;
-  stats: StatItem[];
+  stats?: StatItem[];
+  // Legacy props for backward compatibility
+  value?: string | number;
   className?: string;
 }
 
@@ -25,8 +27,17 @@ const StatsCard: React.FC<StatsCardProps> = ({
   description,
   icon: Icon,
   stats,
+  value,
   className = '',
 }) => {
+  // Handle legacy single stat format
+  const displayStats = stats || (value !== undefined ? [{
+    label: title || 'Value',
+    value: value,
+    description: description,
+    icon: Icon,
+  }] : []);
+
   return (
     <Card className={className}>
       <CardHeader>
@@ -37,30 +48,36 @@ const StatsCard: React.FC<StatsCardProps> = ({
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
       <CardContent className="space-y-4">
-        {stats.map((stat, index) => {
-          const StatIcon = stat.icon;
-          return (
-            <div key={index} className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                {StatIcon && <StatIcon className="h-4 w-4 text-muted-foreground" />}
-                <div>
-                  <span className="text-sm text-muted-foreground">{stat.label}</span>
-                  {stat.description && (
-                    <p className="text-xs text-muted-foreground">{stat.description}</p>
+        {displayStats && displayStats.length > 0 ? (
+          displayStats.map((stat, index) => {
+            const StatIcon = stat.icon;
+            return (
+              <div key={index} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  {StatIcon && <StatIcon className="h-4 w-4 text-muted-foreground" />}
+                  <div>
+                    <span className="text-sm text-muted-foreground">{stat.label}</span>
+                    {stat.description && (
+                      <p className="text-xs text-muted-foreground">{stat.description}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <span className="text-2xl font-bold text-foreground">{stat.value}</span>
+                  {stat.trend && (
+                    <div className={`text-xs ${stat.trend.isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                      {stat.trend.isPositive ? '+' : ''}{stat.trend.value}
+                    </div>
                   )}
                 </div>
               </div>
-              <div className="text-right">
-                <span className="text-2xl font-bold text-foreground">{stat.value}</span>
-                {stat.trend && (
-                  <div className={`text-xs ${stat.trend.isPositive ? 'text-green-600' : 'text-red-600'}`}>
-                    {stat.trend.isPositive ? '+' : ''}{stat.trend.value}
-                  </div>
-                )}
-              </div>
-            </div>
-          );
-        })}
+            );
+          })
+        ) : (
+          <div className="text-center py-4">
+            <p className="text-sm text-muted-foreground">No statistics available</p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

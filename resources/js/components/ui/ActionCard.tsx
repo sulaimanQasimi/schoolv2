@@ -31,7 +31,7 @@ const ActionCard: React.FC<ActionCardProps> = ({
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center space-x-2">
-          {Icon && <Icon className="h-5 w-5" />
+          {Icon && <Icon className="h-5 w-5" />}
           <span>{title}</span>
         </CardTitle>
         {description && <CardDescription>{description}</CardDescription>}

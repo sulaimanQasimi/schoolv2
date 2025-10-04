@@ -58,12 +58,9 @@ interface DepartmentsIndexProps {
   };
 }
 
-const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ departments, branches, filters }) => {
-  const [searchTerm, setSearchTerm] = useState(filters.search || '');
-  const [showFilters, setShowFilters] = useState(false);
-
-  const handleSearch = () => {
-    router.get('/departments', { search: searchTerm }, { preserveState: true });
+const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ departments, branches = [], filters = {} }) => {
+  const handleSearch = (searchFilters: any) => {
+    router.get('/departments', searchFilters, { preserveState: true });
   };
 
   const handlePageChange = (page: number) => {
@@ -71,11 +68,8 @@ const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ departments, branch
   };
 
   const clearFilters = () => {
-    setSearchTerm('');
     router.get('/departments', {}, { preserveState: true });
   };
-
-  const hasActiveFilters = filters.search || filters.branch_id || filters.date_from || filters.date_to;
 
   const columns = [
     {
@@ -98,8 +92,8 @@ const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ departments, branch
       label: 'Branch',
       render: (item: Department) => (
         <div>
-          <div className="font-medium text-foreground">{item.branch.name}</div>
-          <div className="text-sm text-muted-foreground">{item.branch.school.name}</div>
+          <div className="font-medium text-foreground">{item.branch?.name || 'Unknown Branch'}</div>
+          <div className="text-sm text-muted-foreground">{item.branch?.school?.name || 'Unknown School'}</div>
         </div>
       ),
     },
@@ -110,7 +104,7 @@ const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ departments, branch
         <div className="flex items-center space-x-2">
           <User className="h-4 w-4 text-muted-foreground" />
           <span className="text-foreground">
-            {item.head ? item.head.name : 'Not assigned'}
+            {item.head?.name || 'Not assigned'}
           </span>
         </div>
       ),
@@ -132,13 +126,13 @@ const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ departments, branch
   const stats = [
     {
       title: 'Total Departments',
-      value: departments.meta.total,
+      value: departments?.meta?.total || 0,
       description: 'Across all branches',
       icon: Building2,
     },
     {
       title: 'Active Branches',
-      value: branches.length,
+      value: branches?.length || 0,
       description: 'With departments',
       icon: Users,
     },
@@ -175,64 +169,35 @@ const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ departments, branch
 
         {/* Search and Filters */}
         <SearchFilters
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          handleSearch={handleSearch}
-          clearFilters={clearFilters}
-          hasActiveFilters={hasActiveFilters}
-          showFilters={showFilters}
-          setShowFilters={setShowFilters}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Branch
-              </label>
-              <select
-                value={filters.branch_id || ''}
-                onChange={(e) => router.get('/departments', { branch_id: e.target.value }, { preserveState: true })}
-                className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
-              >
-                <option value="">All Branches</option>
-                {branches.map((branch) => (
-                  <option key={branch.id} value={branch.id}>
-                    {branch.name} ({branch.school.name})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Date From
-              </label>
-              <input
-                type="date"
-                value={filters.date_from || ''}
-                onChange={(e) => router.get('/departments', { date_from: e.target.value }, { preserveState: true })}
-                className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Date To
-              </label>
-              <input
-                type="date"
-                value={filters.date_to || ''}
-                onChange={(e) => router.get('/departments', { date_to: e.target.value }, { preserveState: true })}
-                className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
-              />
-            </div>
-          </div>
-        </SearchFilters>
+          searchPlaceholder="Search departments by name, code, description, branch, school, or head..."
+          filters={filters}
+          onSearch={handleSearch}
+          onClear={clearFilters}
+          additionalFilters={[
+            {
+              label: 'Branch',
+              key: 'branch_id',
+              type: 'select',
+              options: branches.map(branch => ({
+                value: branch.id.toString(),
+                label: `${branch.name} (${branch.school.name})`,
+              })),
+            },
+          ]}
+          sortOptions={[
+            { value: 'created_at', label: 'Created Date' },
+            { value: 'name', label: 'Name' },
+            { value: 'code', label: 'Code' },
+            { value: 'branch_name', label: 'Branch Name' },
+            { value: 'school_name', label: 'School Name' },
+          ]}
+        />
 
         {/* Data Table */}
         <DataTable
           title="Department Directory"
           description="A list of all departments across your organization"
-          data={departments.data}
+          data={departments?.data || []}
           columns={columns}
           actions={[
             {
@@ -280,7 +245,7 @@ const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ departments, branch
               href: '/departments/create',
             },
           }}
-          pagination={departments.meta ? {
+          pagination={departments?.meta ? {
             currentPage: departments.meta.current_page,
             lastPage: departments.meta.last_page,
             total: departments.meta.total,

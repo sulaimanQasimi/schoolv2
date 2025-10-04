@@ -13,7 +13,8 @@ import {
   Sun, 
   Moon,
   User,
-  ChevronDown
+  ChevronDown,
+  Building
 } from 'lucide-react';
 
 interface User {
@@ -54,6 +55,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, current: false },
     { name: 'Schools', href: '/schools', icon: School, current: false },
     { name: 'Branches', href: '/branches', icon: Building2, current: false },
+    { name: 'Departments', href: '/departments', icon: Building, current: false },
     { name: 'Users', href: '/users', icon: Users, current: false },
   ];
 

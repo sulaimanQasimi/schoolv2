@@ -16,8 +16,6 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
-        Gate::authorize('viewAny', Department::class);
-        
         $query = Department::with(['branch.school', 'head']);
 
         // Search functionality
@@ -92,8 +90,6 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        Gate::authorize('create', Department::class);
-        
         $branches = Branch::with('school')->select('id', 'name', 'school_id')->orderBy('name')->get();
         $users = User::select('id', 'name', 'email')->orderBy('name')->get();
 
@@ -127,8 +123,6 @@ class DepartmentController extends Controller
      */
     public function show(Department $department)
     {
-        Gate::authorize('view', $department);
-        
         $department->load(['branch.school', 'head']);
 
         return Inertia::render('Departments/Show', [
@@ -141,8 +135,6 @@ class DepartmentController extends Controller
      */
     public function edit(Department $department)
     {
-        Gate::authorize('update', $department);
-        
         $branches = Branch::with('school')->select('id', 'name', 'school_id')->orderBy('name')->get();
         $users = User::select('id', 'name', 'email')->orderBy('name')->get();
 

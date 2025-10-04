@@ -45,7 +45,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
   showAdvancedFilters = true,
 }) => {
   const [showFilters, setShowFilters] = useState(false);
-  const [localFilters, setLocalFilters] = useState(filters);
+  const [localFilters, setLocalFilters] = useState(filters || {});
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,7 +68,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
     setLocalFilters(prev => ({ ...prev, [key]: value }));
   };
 
-  const hasActiveFilters = Object.entries(localFilters).some(([key, value]) => {
+  const hasActiveFilters = localFilters && Object.entries(localFilters).some(([key, value]) => {
     if (key === 'sort_by' && value === 'created_at') return false;
     if (key === 'sort_order' && value === 'desc') return false;
     return value && value !== '';
