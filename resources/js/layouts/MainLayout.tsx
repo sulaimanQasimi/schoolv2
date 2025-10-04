@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, usePage } from '@inertiajs/react';
+import { useNotifications } from '../hooks/useNotifications';
 import { 
   LayoutDashboard, 
   School, 
@@ -39,6 +40,8 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
+  const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
+  const notificationRef = useRef<HTMLDivElement>(null);
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem('theme') === 'dark' || 
            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -50,6 +53,20 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     localStorage.setItem('theme', newDarkMode ? 'dark' : 'light');
     document.documentElement.classList.toggle('dark', newDarkMode);
   };
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
+        setNotificationDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, current: false },
@@ -165,37 +182,64 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   className="p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-accent relative"
                 >
                   <Bell className="h-5 w-5" />
-                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
-                    3
-                  </span>
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 h-4 w-4 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
+                      {unreadCount}
+                    </span>
+                  )}
                 </button>
                 
                 {notificationDropdownOpen && (
-                  <div className="absolute right-0 z-10 mt-2 w-80 rounded-lg bg-popover border border-border shadow-lg">
+                  <div ref={notificationRef} className="absolute right-0 z-10 mt-2 w-80 rounded-lg bg-popover border border-border shadow-lg">
                     <div className="p-4">
-                      <h3 className="text-sm font-semibold text-popover-foreground mb-3">Notifications</h3>
-                      <div className="space-y-3">
-                        <div className="flex items-start space-x-3 p-2 rounded-lg hover:bg-accent">
-                          <div className="h-2 w-2 bg-primary rounded-full mt-2"></div>
-                          <div className="flex-1">
-                            <p className="text-sm text-popover-foreground">New school registration</p>
-                            <p className="text-xs text-muted-foreground">2 minutes ago</p>
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-sm font-semibold text-popover-foreground">Notifications</h3>
+                        {unreadCount > 0 && (
+                          <button
+                            onClick={markAllAsRead}
+                            className="text-xs text-primary hover:text-primary/80"
+                          >
+                            Mark all as read
+                          </button>
+                        )}
+                      </div>
+                      <div className="space-y-3 max-h-64 overflow-y-auto">
+                        {notifications.length > 0 ? (
+                          notifications.map((notification) => (
+                            <div
+                              key={notification.id}
+                              className={`flex items-start space-x-3 p-2 rounded-lg hover:bg-accent cursor-pointer ${
+                                !notification.read ? 'bg-accent/50' : ''
+                              }`}
+                              onClick={() => !notification.read && markAsRead(notification.id)}
+                            >
+                              <div className={`h-2 w-2 rounded-full mt-2 ${
+                                notification.type === 'info' ? 'bg-primary' :
+                                notification.type === 'success' ? 'bg-green-500' :
+                                notification.type === 'warning' ? 'bg-yellow-500' :
+                                'bg-red-500'
+                              }`}></div>
+                              <div className="flex-1">
+                                <p className="text-sm text-popover-foreground font-medium">
+                                  {notification.title}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {notification.message}
+                                </p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {notification.time}
+                                </p>
+                              </div>
+                              {!notification.read && (
+                                <div className="h-2 w-2 bg-primary rounded-full mt-2"></div>
+                              )}
+                            </div>
+                          ))
+                        ) : (
+                          <div className="text-center py-4">
+                            <p className="text-sm text-muted-foreground">No notifications</p>
                           </div>
-                        </div>
-                        <div className="flex items-start space-x-3 p-2 rounded-lg hover:bg-accent">
-                          <div className="h-2 w-2 bg-chart-2 rounded-full mt-2"></div>
-                          <div className="flex-1">
-                            <p className="text-sm text-popover-foreground">Branch update completed</p>
-                            <p className="text-xs text-muted-foreground">1 hour ago</p>
-                          </div>
-                        </div>
-                        <div className="flex items-start space-x-3 p-2 rounded-lg hover:bg-accent">
-                          <div className="h-2 w-2 bg-chart-3 rounded-full mt-2"></div>
-                          <div className="flex-1">
-                            <p className="text-sm text-popover-foreground">System maintenance scheduled</p>
-                            <p className="text-xs text-muted-foreground">3 hours ago</p>
-                          </div>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </div>

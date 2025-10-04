@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\SchoolController;
 use App\Http\Controllers\Api\BranchController;
+use App\Http\Controllers\Api\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +30,10 @@ Route::apiResource('branches', BranchController::class);
 // School-specific branch routes
 Route::get('schools/{school}/branches', [BranchController::class, 'index'])->name('schools.branches.index');
 Route::post('schools/{school}/branches', [BranchController::class, 'store'])->name('schools.branches.store');
+
+// Notification API Routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::patch('notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::patch('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+});
