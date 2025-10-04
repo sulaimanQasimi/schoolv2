@@ -3,6 +3,7 @@ import { router } from '@inertiajs/react';
 import { Card, CardContent } from './Card';
 import { Button } from './Button';
 import { Search, Filter, X, Calendar } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n/translate';
 
 interface FilterOption {
   value: string;
@@ -44,6 +45,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
   ],
   showAdvancedFilters = true,
 }) => {
+  const { t } = useTranslation();
   const [showFilters, setShowFilters] = useState(false);
   const [localFilters, setLocalFilters] = useState(filters || {});
 
@@ -92,12 +94,12 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
             </div>
             <Button type="submit">
               <Search className="mr-2 h-4 w-4" />
-              Search
+              {t('filters.search')}
             </Button>
             {hasActiveFilters && (
               <Button type="button" variant="outline" onClick={handleClear}>
                 <X className="mr-2 h-4 w-4" />
-                Clear
+                {t('filters.clear')}
               </Button>
             )}
             {showAdvancedFilters && (
@@ -108,7 +110,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
                 className={showFilters ? 'bg-accent' : ''}
               >
                 <Filter className="mr-2 h-4 w-4" />
-                Filters
+                {t('filters.filters')}
               </Button>
             )}
           </div>
@@ -118,7 +120,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4 border-t border-border">
               {/* Date From */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Date From</label>
+                <label className="text-sm font-medium text-foreground">{t('filters.date_from')}</label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <input
@@ -132,7 +134,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
 
               {/* Date To */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Date To</label>
+                <label className="text-sm font-medium text-foreground">{t('filters.date_to')}</label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <input
@@ -146,7 +148,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
 
               {/* Sort By */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Sort By</label>
+                <label className="text-sm font-medium text-foreground">{t('filters.sort_by')}</label>
                 <select
                   value={localFilters.sort_by || 'created_at'}
                   onChange={(e) => updateFilter('sort_by', e.target.value)}
@@ -162,14 +164,14 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
 
               {/* Sort Order */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Order</label>
+                <label className="text-sm font-medium text-foreground">{t('filters.order')}</label>
                 <select
                   value={localFilters.sort_order || 'desc'}
                   onChange={(e) => updateFilter('sort_order', e.target.value)}
                   className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                 >
-                  <option value="desc">Descending</option>
-                  <option value="asc">Ascending</option>
+                  <option value="desc">{t('filters.descending')}</option>
+                  <option value="asc">{t('filters.ascending')}</option>
                 </select>
               </div>
 
@@ -183,7 +185,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
                       onChange={(e) => updateFilter(filter.key, e.target.value)}
                       className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                     >
-                      <option value="">All {filter.label}</option>
+                      <option value="">{t('filters.all')} {filter.label}</option>
                       {filter.options?.map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}

@@ -138,39 +138,38 @@ const EditSchool: React.FC<EditSchoolProps> = ({ school }) => {
               {/* Sidebar */}
               <div className="space-y-6">
                 <FormSection
-                  title="Quick Actions"
-                  description="Common tasks after updating"
+                  title={t('schools.edit.quick_actions')}
+                  description={t('schools.edit.quick_actions_description')}
                   className="sticky top-6"
                 >
                   <div className="space-y-4">
                     <div className="p-4 bg-accent rounded-lg">
                       <h4 className="font-medium text-foreground mb-2 flex items-center gap-2">
                         <CheckCircle className="h-4 w-4 text-green-600" />
-                        Next Steps
+                        {t('schools.edit.next_steps')}
                       </h4>
                       <ul className="text-sm text-muted-foreground space-y-1">
-                        <li>• Review updated information</li>
-                        <li>• Check branch associations</li>
-                        <li>• Update user permissions</li>
-                        <li>• Notify stakeholders</li>
+                        <li>• {t('schools.edit.review_updated_info')}</li>
+                        <li>• {t('schools.edit.check_branch_associations')}</li>
+                        <li>• {t('schools.edit.update_user_permissions')}</li>
+                        <li>• {t('schools.edit.notify_stakeholders')}</li>
                       </ul>
                     </div>
                     
                     <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
-                      <h4 className="font-medium text-foreground mb-2">Tips</h4>
+                      <h4 className="font-medium text-foreground mb-2">{t('schools.edit.tips')}</h4>
                       <p className="text-sm text-muted-foreground">
-                        Changes to school information will be reflected across all 
-                        associated branches and user accounts.
+                        {t('schools.edit.tips_description')}
                       </p>
                     </div>
 
                     <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
-                      <h4 className="font-medium text-foreground mb-2">Best Practices</h4>
+                      <h4 className="font-medium text-foreground mb-2">{t('schools.edit.best_practices')}</h4>
                       <ul className="text-sm text-muted-foreground space-y-1">
-                        <li>• Verify all contact information</li>
-                        <li>• Ensure code uniqueness</li>
-                        <li>• Update related documents</li>
-                        <li>• Communicate changes</li>
+                        <li>• {t('schools.edit.verify_contact_info')}</li>
+                        <li>• {t('schools.edit.ensure_code_uniqueness')}</li>
+                        <li>• {t('schools.edit.update_related_documents')}</li>
+                        <li>• {t('schools.edit.communicate_changes')}</li>
                       </ul>
                     </div>
                   </div>

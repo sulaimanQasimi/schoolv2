@@ -121,5 +121,42 @@
     "app.switch_language": "تغییر زبان",
     "app.language_switched": "زبان با موفقیت تغییر کرد",
     "app.loading_translations": "در حال بارگذاری ترجمه‌ها...",
-    "app.translation_error": "خطا در بارگذاری ترجمه‌ها"
+    "app.translation_error": "خطا در بارگذاری ترجمه‌ها",
+    
+    "schools.table.school": "مکتب",
+    "schools.table.contact": "تماس",
+    "schools.table.location": "مکان",
+    "schools.table.branches": "شاخه‌ها",
+    "schools.sort.created_date": "تاریخ ایجاد",
+    "schools.sort.name": "نام",
+    "schools.sort.code": "کد",
+    
+    "schools.edit.quick_actions": "اقدامات سریع",
+    "schools.edit.quick_actions_description": "وظایف معمول پس از به‌روزرسانی",
+    "schools.edit.next_steps": "مراحل بعدی",
+    "schools.edit.review_updated_info": "بررسی اطلاعات به‌روزرسانی شده",
+    "schools.edit.check_branch_associations": "بررسی ارتباطات شاخه‌ها",
+    "schools.edit.update_user_permissions": "به‌روزرسانی مجوزهای کاربر",
+    "schools.edit.notify_stakeholders": "اطلاع‌رسانی به ذینفعان",
+    "schools.edit.tips": "نکات",
+    "schools.edit.tips_description": "تغییرات اطلاعات مکتب در تمام شاخه‌ها و حساب‌های کاربری مرتبط منعکس خواهد شد.",
+    "schools.edit.best_practices": "بهترین روش‌ها",
+    "schools.edit.verify_contact_info": "تأیید تمام اطلاعات تماس",
+    "schools.edit.ensure_code_uniqueness": "اطمینان از یکتایی کد",
+    "schools.edit.update_related_documents": "به‌روزرسانی اسناد مرتبط",
+    "schools.edit.communicate_changes": "ارتباط تغییرات",
+    
+    "filters.search": "جستجو",
+    "filters.clear": "پاک کردن",
+    "filters.filters": "فیلترها",
+    "filters.date_from": "از تاریخ",
+    "filters.date_to": "تا تاریخ",
+    "filters.sort_by": "مرتب‌سازی بر اساس",
+    "filters.order": "ترتیب",
+    "filters.descending": "نزولی",
+    "filters.ascending": "صعودی",
+    "filters.all": "همه",
+    
+    "stats.no_statistics": "هیچ آمار در دسترس نیست",
+    "stats.value": "مقدار"
 }

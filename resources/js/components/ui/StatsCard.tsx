@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './Card';
+import { useTranslation } from '@/lib/i18n/translate';
 
 interface StatItem {
   label: string;
@@ -30,9 +31,10 @@ const StatsCard: React.FC<StatsCardProps> = ({
   value,
   className = '',
 }) => {
+  const { t } = useTranslation();
   // Handle legacy single stat format
   const displayStats = stats || (value !== undefined ? [{
-    label: title || 'Value',
+    label: title || t('stats.value'),
     value: value,
     description: description,
     icon: Icon,
@@ -75,7 +77,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
           })
         ) : (
           <div className="text-center py-4">
-            <p className="text-sm text-muted-foreground">No statistics available</p>
+            <p className="text-sm text-muted-foreground">{t('stats.no_statistics')}</p>
           </div>
         )}
       </CardContent>

@@ -121,5 +121,42 @@
     "app.switch_language": "ژبه بدلول",
     "app.language_switched": "ژبه په بریالیتوب سره بدله شوه",
     "app.loading_translations": "په ژباړو کې بار کې...",
-    "app.translation_error": "په ژباړو کې تیروتنه"
+    "app.translation_error": "په ژباړو کې تیروتنه",
+    
+    "schools.table.school": "ښوونځی",
+    "schools.table.contact": "اړیکه",
+    "schools.table.location": "ځای",
+    "schools.table.branches": "څانګې",
+    "schools.sort.created_date": "د جوړیدو نیټه",
+    "schools.sort.name": "نوم",
+    "schools.sort.code": "کوډ",
+    
+    "schools.edit.quick_actions": "ګړندي کړنې",
+    "schools.edit.quick_actions_description": "د تازه کولو وروسته عامې دندې",
+    "schools.edit.next_steps": "راتلونکي ګامونه",
+    "schools.edit.review_updated_info": "تازه شوي معلومات وګورئ",
+    "schools.edit.check_branch_associations": "د څانګو اړیکې وګورئ",
+    "schools.edit.update_user_permissions": "د کارونکي اجازې تازه کړئ",
+    "schools.edit.notify_stakeholders": "د ذینفعانو خبرتیا ورکړئ",
+    "schools.edit.tips": "نصیحتونه",
+    "schools.edit.tips_description": "د ښوونځي معلوماتو بدلونونه به په ټولو تړلي څانګو او د کارونکي حسابونو کې انعکاس ومومي.",
+    "schools.edit.best_practices": "غوره لارې چارې",
+    "schools.edit.verify_contact_info": "ټول د اړیکو معلومات تصدیق کړئ",
+    "schools.edit.ensure_code_uniqueness": "د کوډ یوازیتوب ډاډمن کړئ",
+    "schools.edit.update_related_documents": "اړونده اسناد تازه کړئ",
+    "schools.edit.communicate_changes": "بدلونونه ابلئ",
+    
+    "filters.search": "لټون",
+    "filters.clear": "پاکول",
+    "filters.filters": "فلټرونه",
+    "filters.date_from": "د نیټې څخه",
+    "filters.date_to": "د نیټې تر",
+    "filters.sort_by": "د ترتیب اساس",
+    "filters.order": "ترتیب",
+    "filters.descending": "کمیدونکی",
+    "filters.ascending": "زیاتیدونکی",
+    "filters.all": "ټول",
+    
+    "stats.no_statistics": "هیڅ احصائیه شتون نلري",
+    "stats.value": "ارزښت"
 }

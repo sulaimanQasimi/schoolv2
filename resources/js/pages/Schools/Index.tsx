@@ -62,7 +62,7 @@ const SchoolsIndex: React.FC<SchoolsIndexProps> = ({ schools, filters }) => {
     const columns = [
         {
             key: 'name',
-            label: 'School',
+            label: t('schools.table.school'),
             render: (value: string, school: School) => (
                 <div className="flex items-center space-x-3">
                     <div className="h-10 w-10 rounded-lg bg-chart-1 flex items-center justify-center">
@@ -77,7 +77,7 @@ const SchoolsIndex: React.FC<SchoolsIndexProps> = ({ schools, filters }) => {
         },
         {
             key: 'email',
-            label: 'Contact',
+            label: t('schools.table.contact'),
             render: (value: string) => (
                 <div className="flex items-center space-x-2">
                     <Phone className="h-3 w-3 text-muted-foreground" />
@@ -87,7 +87,7 @@ const SchoolsIndex: React.FC<SchoolsIndexProps> = ({ schools, filters }) => {
         },
         {
             key: 'address',
-            label: 'Location',
+            label: t('schools.table.location'),
             render: (value: string) => (
                 <div className="flex items-start space-x-2">
                     <MapPin className="h-3 w-3 text-muted-foreground mt-1" />
@@ -97,7 +97,7 @@ const SchoolsIndex: React.FC<SchoolsIndexProps> = ({ schools, filters }) => {
         },
         {
             key: 'branches_count',
-            label: 'Branches',
+            label: t('schools.table.branches'),
             render: (value: number) => (
                 <div className="flex items-center space-x-2">
                     <Building2 className="h-3 w-3 text-muted-foreground" />
@@ -130,9 +130,9 @@ const SchoolsIndex: React.FC<SchoolsIndexProps> = ({ schools, filters }) => {
                     onSearch={handleSearch}
                     onClear={clearFilters}
                     sortOptions={[
-                        { value: 'created_at', label: 'Created Date' },
-                        { value: 'name', label: 'Name' },
-                        { value: 'code', label: 'Code' },
+                        { value: 'created_at', label: t('schools.sort.created_date') },
+                        { value: 'name', label: t('schools.sort.name') },
+                        { value: 'code', label: t('schools.sort.code') },
                     ]}
                 />
 
