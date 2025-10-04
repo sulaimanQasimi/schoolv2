@@ -5,23 +5,36 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../..
 import { Button } from '../../components/ui/Button';
 import { ArrowLeft, School, Save, AlertCircle } from 'lucide-react';
 
-const CreateSchool: React.FC = () => {
-  const { data, setData, post, processing, errors } = useForm({
-    name: '',
-    code: '',
-    address: '',
-    email: '',
-    phone_number: '',
+interface School {
+  id: number;
+  name: string;
+  code: string;
+  address: string;
+  email: string;
+  phone_number: string;
+}
+
+interface EditSchoolProps {
+  school: School;
+}
+
+const EditSchool: React.FC<EditSchoolProps> = ({ school }) => {
+  const { data, setData, put, processing, errors } = useForm({
+    name: school.name,
+    code: school.code,
+    address: school.address,
+    email: school.email,
+    phone_number: school.phone_number,
   });
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    post('/schools');
+    put(`/schools/${school.id}`);
   };
 
   return (
     <MainLayout>
-      <Head title="Create School" />
+      <Head title={`Edit ${school.name}`} />
       
       <div className="space-y-6">
         {/* Header */}
@@ -34,8 +47,8 @@ const CreateSchool: React.FC = () => {
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-foreground">Create New School</h1>
-              <p className="text-muted-foreground">Add a new school to your system</p>
+              <h1 className="text-3xl font-bold text-foreground">Edit School</h1>
+              <p className="text-muted-foreground">Update school information</p>
             </div>
           </div>
         </div>
@@ -49,7 +62,7 @@ const CreateSchool: React.FC = () => {
                 <span>School Information</span>
               </CardTitle>
               <CardDescription>
-                Enter the details for the new school
+                Update the details for {school.name}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -172,7 +185,7 @@ const CreateSchool: React.FC = () => {
                     </Button>
                   </Link>
                   <Button type="submit" disabled={processing}>
-                    {processing ? 'Creating...' : 'Create School'}
+                    {processing ? 'Updating...' : 'Update School'}
                     <Save className="ml-2 h-4 w-4" />
                   </Button>
                 </div>
@@ -185,4 +198,4 @@ const CreateSchool: React.FC = () => {
   );
 };
 
-export default CreateSchool;
+export default EditSchool;
